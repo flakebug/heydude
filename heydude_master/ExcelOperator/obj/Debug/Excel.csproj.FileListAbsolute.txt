@@ -1,0 +1,1 @@
+C:\dev\ExcelOperator\obj\Debug\Excel.csprojResolveAssemblyReference.cache

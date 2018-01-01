@@ -1,0 +1,10 @@
+C:\dev\DataTableComparator\bin\Debug\ryliang.DataTableComparator.dll
+C:\dev\DataTableComparator\bin\Debug\ryliang.DataTableComparator.pdb
+C:\dev\DataTableComparator\obj\Debug\ryliang.DataTableComparator.csprojResolveAssemblyReference.cache
+C:\dev\DataTableComparator\obj\Debug\ryliang.DataTableComparator.dll
+C:\dev\DataTableComparator\obj\Debug\ryliang.DataTableComparator.pdb
+C:\dev\heydude_master\DataTableComparator\obj\Debug\ryliang.DataTableComparator.csprojResolveAssemblyReference.cache
+C:\dev\heydude_master\DataTableComparator\obj\Debug\ryliang.DataTableComparator.dll
+C:\dev\heydude_master\DataTableComparator\bin\Debug\ryliang.DataTableComparator.dll
+C:\dev\heydude_master\DataTableComparator\bin\Debug\ryliang.DataTableComparator.pdb
+C:\dev\heydude_master\DataTableComparator\obj\Debug\ryliang.DataTableComparator.pdb

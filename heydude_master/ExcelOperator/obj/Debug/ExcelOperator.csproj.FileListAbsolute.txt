@@ -1,0 +1,5 @@
+C:\dev\ExcelOperator\bin\Debug\ExcelOperator.dll
+C:\dev\ExcelOperator\bin\Debug\ExcelOperator.pdb
+C:\dev\ExcelOperator\obj\Debug\ExcelOperator.csprojResolveAssemblyReference.cache
+C:\dev\ExcelOperator\obj\Debug\ExcelOperator.dll
+C:\dev\ExcelOperator\obj\Debug\ExcelOperator.pdb

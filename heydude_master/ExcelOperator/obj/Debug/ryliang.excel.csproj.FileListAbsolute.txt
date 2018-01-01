@@ -1,0 +1,14 @@
+C:\dev\ExcelOperator\obj\Debug\ryliang.excel.csprojResolveAssemblyReference.cache
+C:\dev\ExcelOperator\bin\Debug\ryliang.excel.dll
+C:\dev\ExcelOperator\bin\Debug\ryliang.excel.pdb
+C:\dev\ExcelOperator\bin\Debug\EPPlus.dll
+C:\dev\ExcelOperator\bin\Debug\EPPlus.xml
+C:\dev\ExcelOperator\obj\Debug\ryliang.excel.dll
+C:\dev\ExcelOperator\obj\Debug\ryliang.excel.pdb
+C:\dev\heydude_master\ExcelOperator\bin\Debug\ryliang.Excel.dll
+C:\dev\heydude_master\ExcelOperator\bin\Debug\ryliang.Excel.pdb
+C:\dev\heydude_master\ExcelOperator\bin\Debug\EPPlus.dll
+C:\dev\heydude_master\ExcelOperator\bin\Debug\EPPlus.xml
+C:\dev\heydude_master\ExcelOperator\obj\Debug\ryliang.excel.csprojResolveAssemblyReference.cache
+C:\dev\heydude_master\ExcelOperator\obj\Debug\ryliang.Excel.dll
+C:\dev\heydude_master\ExcelOperator\obj\Debug\ryliang.Excel.pdb

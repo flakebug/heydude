@@ -1,0 +1,5 @@
+C:\dev\DataTableComparator\bin\Debug\DataTableComparator.dll
+C:\dev\DataTableComparator\bin\Debug\DataTableComparator.pdb
+C:\dev\DataTableComparator\obj\Debug\DataTableComparator.csprojResolveAssemblyReference.cache
+C:\dev\DataTableComparator\obj\Debug\DataTableComparator.dll
+C:\dev\DataTableComparator\obj\Debug\DataTableComparator.pdb
