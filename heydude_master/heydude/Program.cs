@@ -35,12 +35,22 @@ namespace heydude
 			Console.WriteLine("Slave Key Column : " + dtc.SlaveDataTableInfo.KeyColumnIndex);
 			
 			foreach (DataTableCellMappingDefinition mapItem in dtc.CellMappingCollection) {
-				Console.Write("R" + mapItem.MasterCell.RowIndex);
-				Console.Write("C" + mapItem.MasterCell.ColumnIndex);
-				Console.Write("|Index:" + mapItem.MasterCell.Indexed);
-				Console.Write("|Status:" + mapItem.Status.ToString());
-				Console.Write("|Content:" + mapItem.MasterCell.DataRow[mapItem.MasterCell.ColumnIndex]);
-				Console.WriteLine();
+				if (mapItem.Status == MappingStatusDefinition.Delete) {
+					Console.Write("R" + mapItem.SlaveCell.RowIndex);
+					Console.Write("C" + mapItem.SlaveCell.ColumnIndex);
+					Console.Write("|Index:" + mapItem.SlaveCell.Indexed);
+					Console.Write("|Status:" + mapItem.Status.ToString());
+					Console.Write("|Content:" + mapItem.SlaveCell.DataRow[mapItem.SlaveCell.ColumnIndex]);
+					Console.WriteLine();
+				}
+				if (mapItem.Status == MappingStatusDefinition.New) {
+					Console.Write("R" + mapItem.MasterCell.RowIndex);
+					Console.Write("C" + mapItem.MasterCell.ColumnIndex);
+					Console.Write("|Index:" + mapItem.MasterCell.Indexed);
+					Console.Write("|Status:" + mapItem.Status.ToString());
+					Console.Write("|Content:" + mapItem.MasterCell.DataRow[mapItem.MasterCell.ColumnIndex]);
+					Console.WriteLine();
+				}
 			}
 //			DataTableInfo dti = new DataTableInfo(ds.Tables[0]);
 //			dti.InitializeDataTableInfo();

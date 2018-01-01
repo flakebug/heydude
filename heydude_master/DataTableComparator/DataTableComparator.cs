@@ -51,10 +51,29 @@ namespace ryliang.DataTableComparator
 			_masterDataTableInfo.InitializeDataTableInfo();
 			_slaveDataTableInfo.InitializeDataTableInfo();
 			_cellMappingCollection = CreateCellMapping(_masterDataTableInfo, _slaveDataTableInfo);
+			_cellMappingCollection = CalculateTargetRowAndColumn(_cellMappingCollection);
 		}
+		public List<DataTableCellMappingDefinition> CalculateTargetRowAndColumn(List<DataTableCellMappingDefinition> CellMapping)
+		{
+			List<DataTableCellMappingDefinition> resultCellMapping = new List<DataTableCellMappingDefinition>();
+			HashSet<int> deletedColumnIndexList = new HashSet<int>();
+			HashSet<int> deletedRowIndexList = new HashSet<int>();
+			foreach (DataTableCellMappingDefinition mapItem in CellMapping) {
+				if (mapItem.Status == MappingStatusDefinition.Delete) {
+					if (mapItem.SlaveCell.ColumnIndex == _slaveDataTableInfo.KeyColumnIndex)
+						deletedColumnIndexList.Add(mapItem.SlaveCell.ColumnIndex);
+					if (mapItem.SlaveCell.RowIndex == _slaveDataTableInfo.KeyRowIndex)					
+						deletedRowIndexList.Add(mapItem.SlaveCell.RowIndex);
+				}
+			}
+			return resultCellMapping;
+		}
+		
 		public List<DataTableCellMappingDefinition> CreateCellMapping(DataTableInfo MasterDataTableInfo, DataTableInfo SlaveDataTableInfo)
 		{
 			List<DataTableCellMappingDefinition> resultCellMapping = new List<DataTableCellMappingDefinition>();
+			
+			//Handling for MasterDataTableInfo
 			Parallel.For(0, 
 				MasterDataTableInfo.PayloadDataTable.Rows.Count, 
 				(int rowIndex) => {
@@ -83,23 +102,69 @@ namespace ryliang.DataTableComparator
 								slaveCell = getNullCellDef();
 								cellMap.Status = MappingStatusDefinition.New;
 							}
-
-							//cellMap.Status = 
-
-							//slaveCell = SlaveDataTableInfo.GetCell(
 						} else {
 							//master cell is not indexed
 							slaveCell = getNullCellDef();
 							cellMap.Status = MappingStatusDefinition.Unknown;
 						}
+						cellMap.TargetRowIndex = -1;
+						cellMap.TargetColumnIndex = -1;
 						cellMap.MasterCell = masterCell;
 						cellMap.SlaveCell = slaveCell;
-						//cellMap.Status
+
 						lock (resultCellMapping) {
 							resultCellMapping.Add(cellMap);
 						}
 					}
 				});
+			
+			//Handling for SlaveDataTableInfo
+			Parallel.For(0, 
+				SlaveDataTableInfo.PayloadDataTable.Rows.Count, 
+				(int rowIndex) => {
+					for (int columnIndex = 0;
+			             columnIndex < SlaveDataTableInfo.PayloadDataTable.Columns.Count;
+			             columnIndex++) {
+						DataTableCellMappingDefinition cellMap;
+						DataTableCellDefinition slaveCell;
+						slaveCell = SlaveDataTableInfo.GetCell(rowIndex, columnIndex);
+						DataTableCellDefinition masterCell;
+						if (slaveCell.Indexed) {
+							//slave cell indexed
+							string slaveRowName = SlaveDataTableInfo.IndexedRowSetByNumber[rowIndex];
+							string slaveColumnName = SlaveDataTableInfo.IndexedColumnSetByNumber[columnIndex];
+							if (MasterDataTableInfo.IndexedRowSetByName.ContainsKey(slaveRowName) &&
+							    MasterDataTableInfo.IndexedColumnSetByName.ContainsKey(slaveColumnName)) {
+								int masterRowIndex = MasterDataTableInfo.IndexedRowSetByName[slaveRowName];
+								int masterColumnIndex = MasterDataTableInfo.IndexedColumnSetByName[slaveColumnName];	
+								masterCell = MasterDataTableInfo.GetCell(masterRowIndex, masterColumnIndex);
+								if (slaveCell.DataRow[columnIndex].ToString() == masterCell.DataRow[masterColumnIndex].ToString()) {
+									cellMap.Status = MappingStatusDefinition.Unchange;
+								} else {
+									cellMap.Status = MappingStatusDefinition.Update;
+								}
+							} else {
+								masterCell = getNullCellDef();
+								cellMap.Status = MappingStatusDefinition.Delete;
+							}
+						} else {
+							//slave cell indexed
+							masterCell = getNullCellDef();
+							cellMap.Status = MappingStatusDefinition.Unknown;
+						}
+						cellMap.TargetRowIndex = -1;
+						cellMap.TargetColumnIndex = -1;
+						cellMap.MasterCell = masterCell;
+						cellMap.SlaveCell = slaveCell;
+
+						lock (resultCellMapping) {
+							if (cellMap.Status == MappingStatusDefinition.Delete)
+								resultCellMapping.Add(cellMap);
+						}
+					}
+				});
+			
+			
 			return resultCellMapping;
 		}
 		

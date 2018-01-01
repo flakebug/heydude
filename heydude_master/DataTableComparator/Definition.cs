@@ -18,6 +18,8 @@ public struct DataTableCellDefinition
 
 public struct DataTableCellMappingDefinition
 {
+	public int TargetRowIndex;
+	public int TargetColumnIndex;
 	public DataTableCellDefinition MasterCell;
 	public DataTableCellDefinition SlaveCell;
 	public MappingStatusDefinition Status;
