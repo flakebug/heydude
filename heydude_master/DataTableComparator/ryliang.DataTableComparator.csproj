@@ -53,5 +53,11 @@
     <Compile Include="Definition.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ExcelOperator\ryliang.excel.csproj">
+      <Project>{22e4d0fd-a850-45d9-91d4-92753ed88019}</Project>
+      <Name>ryliang.Excel</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

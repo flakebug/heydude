@@ -6,19 +6,20 @@
  * 
  * To change this template use Tools | Options | Coding | Edit Standard Headers.
  */
+using System.Data;
 
-public struct CellDefinition
+public struct DataTableCellDefinition
 {
 	public int RowIndex;
 	public int ColumnIndex;
 	public bool Indexed;
-	public string Text;
+	public DataRow DataRow;
 }
 
-public struct CellMappingDefinition
+public struct DataTableCellMappingDefinition
 {
-	public CellDefinition MasterCell;
-	public CellDefinition SlaveCell;
+	public DataTableCellDefinition MasterCell;
+	public DataTableCellDefinition SlaveCell;
 	public MappingStatusDefinition Status;
 }
 
@@ -31,3 +32,8 @@ public enum MappingStatusDefinition
 	Unknown
 }
 
+public enum ComparisonMethodDefinition
+{
+	List,
+	Form
+}

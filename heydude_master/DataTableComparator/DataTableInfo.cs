@@ -27,6 +27,7 @@ namespace ryliang.DataTableComparator
 		private Dictionary<int, string> _indexedColumnSetByNumber;
 		private Dictionary<string, int> _indexedRowSetByName;
 		private Dictionary<string, int> _indexedColumnSetByName;
+		private bool _autoKeyIndex;
 		
 		public int KeyRowIndex {
 			get { return _keyRowIndex; }
@@ -42,7 +43,11 @@ namespace ryliang.DataTableComparator
 			get { return _payloadTable; }
 			set { _payloadTable = value; }
 		}
-		
+		public bool AutoKeyIndex
+		{
+			get { return _autoKeyIndex; }
+			set { _autoKeyIndex = value; }
+		}
 
 		public Dictionary<int, string> IndexedRowSetByNumber
 		{
@@ -69,8 +74,10 @@ namespace ryliang.DataTableComparator
 		
 		public void InitializeDataTableInfo()
 		{
-			_keyRowIndex = findKeyRowIndex();
-			_keyColumnIndex = findKeyColumnIndex();
+			if(_autoKeyIndex) {
+				_keyRowIndex = findKeyRowIndex();
+				_keyColumnIndex = findKeyColumnIndex();
+			}
 			_keyRowIndexList = getKeyRowIndexList();
 			_keyColumnIndexList = getKeyColumnIndexList();
 			_indexedColumnSetByNumber = getIndexedColumnSetByNumber();
@@ -79,29 +86,29 @@ namespace ryliang.DataTableComparator
 			_indexedRowSetByName = getIndexedRowSetByName();
 		}
 		
-		public List<CellDefinition> GetCell(string KeyRowName, string KeyColumnName)
+		public List<DataTableCellDefinition> GetCell(string KeyRowName, string KeyColumnName)
 		{
-			List<CellDefinition> result = new List<CellDefinition>();
+			List<DataTableCellDefinition> result = new List<DataTableCellDefinition>();
 			foreach (int columnIndex in _keyRowIndexList[KeyRowName]) {	//columnIndex in keyRow(or header)
 				foreach (int rowIndex in _keyColumnIndexList[KeyColumnName]) {	//rowIndex in keyColum(the index key)
-					CellDefinition cell;
+					DataTableCellDefinition cell;
 					cell.RowIndex = rowIndex;
 					cell.ColumnIndex = columnIndex;
 					cell.Indexed = getCellIndexStatus(rowIndex, columnIndex);
-					cell.Text = _payloadTable.Rows[rowIndex][columnIndex].ToString();
+					cell.DataRow = _payloadTable.Rows[rowIndex];
 					result.Add(cell);
 				}
 			}
 			return result;
 		}
 		
-		public CellDefinition GetCell(int RowIndex, int ColumnIndex)
+		public DataTableCellDefinition GetCell(int RowIndex, int ColumnIndex)
 		{
-			CellDefinition cell;
+			DataTableCellDefinition cell;
 			cell.RowIndex = RowIndex;
 			cell.ColumnIndex = ColumnIndex;
 			cell.Indexed = getCellIndexStatus(RowIndex, ColumnIndex);
-			cell.Text = _payloadTable.Rows[RowIndex][ColumnIndex].ToString();			
+			cell.DataRow = _payloadTable.Rows[RowIndex];			
 			return cell;
 		}
 		

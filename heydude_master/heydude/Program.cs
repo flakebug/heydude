@@ -22,10 +22,26 @@ namespace heydude
 			DataSet ds = xlsxop.LoadWorkbook();
 			
 			DataTableComparator dtc = new DataTableComparator(ds.Tables[0], ds.Tables[1]);
-
-			DataTableInfo dti = new DataTableInfo(ds.Tables[0]);
-			dti.InitializeDataTableInfo();
-			Console.WriteLine(dti.GetCell(2,2).Text + ":" + dti.GetCell(2,2).Indexed);
+			dtc.MasterDataTableInfo.KeyColumnIndex = 0;
+			dtc.MasterDataTableInfo.KeyRowIndex = 0;
+			dtc.SlaveDataTableInfo.KeyColumnIndex = 0;
+			dtc.SlaveDataTableInfo.KeyRowIndex = 0;		
+			dtc.MasterDataTableInfo.AutoKeyIndex = false;
+			dtc.SlaveDataTableInfo.AutoKeyIndex = false;
+			dtc.Compare();
+			Console.WriteLine("Master Key Row : " + dtc.MasterDataTableInfo.KeyRowIndex);
+			Console.WriteLine("Master Key Column : " + dtc.MasterDataTableInfo.KeyColumnIndex);
+			Console.WriteLine("Slave Key Row : " + dtc.SlaveDataTableInfo.KeyRowIndex);
+			Console.WriteLine("Slave Key Column : " + dtc.SlaveDataTableInfo.KeyColumnIndex);
+			
+			foreach (DataTableCellMappingDefinition mapItem in dtc.CellMappingCollection) {
+				Console.Write("R" + mapItem.MasterCell.RowIndex);
+				Console.Write("C" + mapItem.MasterCell.ColumnIndex);
+				Console.Write("|Index:" + mapItem.MasterCell.Indexed);
+				Console.Write("|Status:" + mapItem.Status.ToString());
+				Console.Write("|Content:" + mapItem.MasterCell.DataRow[mapItem.MasterCell.ColumnIndex]);
+				Console.WriteLine();
+			}
 //			DataTableInfo dti = new DataTableInfo(ds.Tables[0]);
 //			dti.InitializeDataTableInfo();
 //			List<CellDefinition> cd = dti.GetCell("b","6");
