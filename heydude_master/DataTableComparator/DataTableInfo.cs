@@ -91,7 +91,7 @@ namespace ryliang.DataTableComparator
 			List<DataTableCellDefinition> result = new List<DataTableCellDefinition>();
 			foreach (int columnIndex in _keyRowIndexList[KeyRowName]) {	//columnIndex in keyRow(or header)
 				foreach (int rowIndex in _keyColumnIndexList[KeyColumnName]) {	//rowIndex in keyColum(the index key)
-					DataTableCellDefinition cell;
+					DataTableCellDefinition cell = new DataTableCellDefinition();
 					cell.RowIndex = rowIndex;
 					cell.ColumnIndex = columnIndex;
 					cell.Indexed = getCellIndexStatus(rowIndex, columnIndex);
@@ -104,7 +104,7 @@ namespace ryliang.DataTableComparator
 		
 		public DataTableCellDefinition GetCell(int RowIndex, int ColumnIndex)
 		{
-			DataTableCellDefinition cell;
+			DataTableCellDefinition cell = new DataTableCellDefinition();
 			cell.RowIndex = RowIndex;
 			cell.ColumnIndex = ColumnIndex;
 			cell.Indexed = getCellIndexStatus(RowIndex, ColumnIndex);

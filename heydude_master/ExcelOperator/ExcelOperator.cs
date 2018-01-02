@@ -12,23 +12,33 @@ using System.IO;
 using System.Data;
 using System.Threading.Tasks;
 using OfficeOpenXml;
-
+using OfficeOpenXml.Style;
 namespace ryliang.Excel
 {
-
-public class CellPropertyDef
-{
-	public int RowIndex;
-	public int ColumnIndex;
-	public string Comment;
-	public System.Drawing.Color FontColor;
-	public System.Drawing.Color BackgroundColor;
-}
-public class DataTablePropertyDef
-{
-	public DataTable DataTable;
-	public CellPropertyDef CellProperty;
-}
+	
+	public class CellPropertyDef
+	{
+		public int RowIndex;
+		public int ColumnIndex;
+		public string Comment;
+		public System.Drawing.Color FontColor;
+		public System.Drawing.Color BackgroundColor;
+		public CellPropertyDef(int RowIndex, int ColumnIndex)
+		{
+			this.RowIndex = RowIndex;
+			this.ColumnIndex = ColumnIndex;
+		}
+	}
+	public class DataTablePropertyDef
+	{
+		public DataTable DataTable;
+		public CellPropertyDef CellProperty;
+		public DataTablePropertyDef(DataTable DataTable, CellPropertyDef CellProperty)
+		{
+			this.DataTable = DataTable;
+			this.CellProperty = CellProperty;
+		}
+	}
 
 	/// <summary>
 	/// Handling the excel object
@@ -115,7 +125,7 @@ public class DataTablePropertyDef
 			}
 			_excelPackage.Save();
 		}
-		public void SaveWorkbook(List<DataTablePropertyDef> DataTablePropertyCollection, string Filename)
+		public void SaveWorkbook(DataTable DataTable, List<CellPropertyDef> CellPropertyCollection, string Filename)
 		{
 			if (File.Exists(Filename))
 				File.Delete(Filename);
@@ -123,48 +133,60 @@ public class DataTablePropertyDef
 			ExcelPackage _excelPackage;	
 			_excelPackage = new ExcelPackage(newFile);
 			
-			for (int tableIndex = 0;
-			     tableIndex < DataTablePropertyCollection.Count;
-			     tableIndex++) {
-				DataTable dt = DataTablePropertyCollection[tableIndex].DataTable;
-				ExcelWorksheet worksheet = _excelPackage.Workbook.Worksheets.Add(dt.TableName);
-				Parallel.For(0, dt.Rows.Count, (int rowIndex) => {
-					for (int columnIndex = 0;
-				         columnIndex < dt.Columns.Count;
-				         columnIndex++) {
-						lock (worksheet) {
-							worksheet.Cells[rowIndex + 1, columnIndex + 1].Value = dt.Rows[rowIndex][columnIndex];
-						}
+//			for (int tableIndex = 0;
+//			     tableIndex < DataTablePropertyCollection.Count;
+//			     tableIndex++) {
+			ExcelWorksheet worksheet = _excelPackage.Workbook.Worksheets.Add(DataTable.TableName);
+			;
+
+			Object thisLock = new Object();
+			Parallel.ForEach(CellPropertyCollection, (CellPropertyDef propItem) => {
+				lock (thisLock) {
+					worksheet.Cells[propItem.RowIndex + 1, propItem.ColumnIndex + 1].Value = DataTable.Rows[propItem.RowIndex][propItem.ColumnIndex];
+				}
+				if (!propItem.BackgroundColor.IsEmpty) {
+					lock (thisLock) {
+						worksheet.Cells[propItem.RowIndex + 1, propItem.ColumnIndex + 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+						worksheet.Cells[propItem.RowIndex + 1, propItem.ColumnIndex + 1].Style.Fill.BackgroundColor.SetColor(propItem.BackgroundColor);
 					}
-				});
-			}
+				}
+				if (propItem.Comment != null && propItem.Comment.Trim() != "") {
+					ExcelComment cmt = worksheet.Cells[propItem.RowIndex + 1, propItem.ColumnIndex + 1].Comment;
+					if (cmt != null)
+						worksheet.Comments.Remove(cmt);
+					lock (thisLock) {
+						worksheet.Cells[propItem.RowIndex + 1, propItem.ColumnIndex + 1].AddComment(propItem.Comment, "ryliang");
+					}
+				}
+			});
+//			}
 
 			_excelPackage.Save();
-		}		
-//		public void SaveWorkbook(Workbook ExcelInterfaceObject, string Filename)
-//		{
-//			if (File.Exists(Filename))
-//				File.Delete(Filename);
-//			FileInfo newFile = new FileInfo(Filename);
-//			ExcelPackage eppPackage;	
-//			eppPackage = new ExcelPackage(newFile);
-//			
-//			for (int tableIndex = 0;
-//			     tableIndex < ExcelInterfaceObject.Worksheets.Count;
-//			     tableIndex++) {
-//				Worksheet worksheet = ExcelInterfaceObject.Worksheets[tableIndex];
-//				ExcelWorksheet eppWorksheet = eppPackage.Workbook.Worksheets.Add(worksheet.Name);
-//				Parallel.For(0, worksheet.Rows.Count, (int rowIndex) => {
-//					for (int columnIndex = 0;
-//				         columnIndex < worksheet.Rows[rowIndex].Columns.Count;
-//				         columnIndex++) {
-//						lock (eppWorksheet) {
-//							eppWorksheet.Cells[rowIndex + 1, columnIndex + 1].Value = worksheet.Rows[rowIndex].Columns[columnIndex].Text;
-//						}
-//					}
-//				});
-//			}
-//			eppPackage.Save();
-//		}
+		}
+		//		public void SaveWorkbook(Workbook ExcelInterfaceObject, string Filename)
+		//		{
+		//			if (File.Exists(Filename))
+		//				File.Delete(Filename);
+		//			FileInfo newFile = new FileInfo(Filename);
+		//			ExcelPackage eppPackage;
+		//			eppPackage = new ExcelPackage(newFile);
+		//
+		//			for (int tableIndex = 0;
+		//			     tableIndex < ExcelInterfaceObject.Worksheets.Count;
+		//			     tableIndex++) {
+		//				Worksheet worksheet = ExcelInterfaceObject.Worksheets[tableIndex];
+		//				ExcelWorksheet eppWorksheet = eppPackage.Workbook.Worksheets.Add(worksheet.Name);
+		//				Parallel.For(0, worksheet.Rows.Count, (int rowIndex) => {
+		//					for (int columnIndex = 0;
+		//				         columnIndex < worksheet.Rows[rowIndex].Columns.Count;
+		//				         columnIndex++) {
+		//						lock (eppWorksheet) {
+		//							eppWorksheet.Cells[rowIndex + 1, columnIndex + 1].Value = worksheet.Rows[rowIndex].Columns[columnIndex].Text;
+		//						}
+		//					}
+		//				});
+		//			}
+		//			eppPackage.Save();
+		//		}
 	}
 }

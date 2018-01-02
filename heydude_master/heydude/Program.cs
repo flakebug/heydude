@@ -8,6 +8,7 @@
  */
 using System;
 using System.Data;
+using System.Drawing;
 using ryliang.DataTableComparator;
 using ryliang.Excel;
 using System.Collections.Generic;
@@ -34,24 +35,56 @@ namespace heydude
 			Console.WriteLine("Slave Key Row : " + dtc.SlaveDataTableInfo.KeyRowIndex);
 			Console.WriteLine("Slave Key Column : " + dtc.SlaveDataTableInfo.KeyColumnIndex);
 			
+			DataTable dtResult = new DataTable("output");
+			for (int columnIndex = 0; columnIndex < dtc.CellMappingColumnCount; columnIndex++)
+				dtResult.Columns.Add(columnIndex.ToString(), typeof(string));
+			for (int rowIndex = 0; rowIndex < dtc.CellMappingRowCount; rowIndex++)
+				dtResult.Rows.Add(dtResult.NewRow());
+			
+			
+			List<CellPropertyDef> output = new List<CellPropertyDef>();
+			//CellPropertyDef cl = new CellPropertyDef(mapItem.TargetRowIndex,mapItem.TargetColumnIndex);
+		
+				
 			foreach (DataTableCellMappingDefinition mapItem in dtc.CellMappingCollection) {
+				//if (dtResult.Rows[mapItem.TargetRowIndex].IsNull)
+				CellPropertyDef cl = new CellPropertyDef(mapItem.TargetRowIndex, mapItem.TargetColumnIndex);
 				if (mapItem.Status == MappingStatusDefinition.Delete) {
-					Console.Write("R" + mapItem.SlaveCell.RowIndex);
-					Console.Write("C" + mapItem.SlaveCell.ColumnIndex);
-					Console.Write("|Index:" + mapItem.SlaveCell.Indexed);
-					Console.Write("|Status:" + mapItem.Status.ToString());
-					Console.Write("|Content:" + mapItem.SlaveCell.DataRow[mapItem.SlaveCell.ColumnIndex]);
-					Console.WriteLine();
+//					Console.Write("|T|R" + mapItem.TargetRowIndex);
+//					Console.Write("C" + mapItem.TargetColumnIndex);					
+//					Console.Write("|S|R" + mapItem.SlaveCell.RowIndex);
+//					Console.Write("C" + mapItem.SlaveCell.ColumnIndex);
+//					Console.Write("|Index:" + mapItem.SlaveCell.Indexed);
+//					Console.Write("|Status:" + mapItem.Status.ToString());
+//					Console.Write("|Content:" + mapItem.SlaveCell.DataRow[mapItem.SlaveCell.ColumnIndex]);
+//					Console.WriteLine();
+					dtResult.Rows[mapItem.TargetRowIndex][mapItem.TargetColumnIndex] = mapItem.SlaveCell.Text;
+					cl.BackgroundColor = Color.LightGray;
+				} else {
+//					Console.Write("|T|R" + mapItem.TargetRowIndex);
+//					Console.Write("C" + mapItem.TargetColumnIndex);						
+//					Console.Write("|S|R" + mapItem.MasterCell.RowIndex);
+//					Console.Write("C" + mapItem.MasterCell.ColumnIndex);
+//					Console.Write("|Index:" + mapItem.MasterCell.Indexed);
+//					Console.Write("|Status:" + mapItem.Status.ToString());
+//					Console.Write("|Content:" + mapItem.MasterCell.DataRow[mapItem.MasterCell.ColumnIndex]);
+//					Console.WriteLine();
+					dtResult.Rows[mapItem.TargetRowIndex][mapItem.TargetColumnIndex] = mapItem.MasterCell.Text;
+					if (mapItem.Status == MappingStatusDefinition.Update) {
+						cl.Comment = mapItem.SlaveCell.Text;
+						cl.BackgroundColor = Color.Yellow;
+					}
+					if (mapItem.Status == MappingStatusDefinition.New) {
+						cl.BackgroundColor = Color.LightGreen;
+					}						
+					if (mapItem.Status == MappingStatusDefinition.Unknown) {
+						cl.BackgroundColor = Color.LightPink;
+					}								
 				}
-				if (mapItem.Status == MappingStatusDefinition.New) {
-					Console.Write("R" + mapItem.MasterCell.RowIndex);
-					Console.Write("C" + mapItem.MasterCell.ColumnIndex);
-					Console.Write("|Index:" + mapItem.MasterCell.Indexed);
-					Console.Write("|Status:" + mapItem.Status.ToString());
-					Console.Write("|Content:" + mapItem.MasterCell.DataRow[mapItem.MasterCell.ColumnIndex]);
-					Console.WriteLine();
-				}
+				output.Add(cl);
 			}
+			xlsxop.SaveWorkbook(dtResult, output, "output.xlsx");
+			
 //			DataTableInfo dti = new DataTableInfo(ds.Tables[0]);
 //			dti.InitializeDataTableInfo();
 //			List<CellDefinition> cd = dti.GetCell("b","6");

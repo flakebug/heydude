@@ -8,18 +8,26 @@
  */
 using System.Data;
 
-public struct DataTableCellDefinition
+public class DataTableCellDefinition
 {
-	public int RowIndex;
-	public int ColumnIndex;
-	public bool Indexed;
+	public int RowIndex = -1;
+	public int ColumnIndex = -1;
+	public bool Indexed = false;
 	public DataRow DataRow;
+	public string Text
+	{
+		get {
+			if (DataRow == null || DataRow[ColumnIndex] == null)
+				return "";
+			return DataRow[ColumnIndex].ToString(); 
+		}
+	}
 }
 
-public struct DataTableCellMappingDefinition
+public class DataTableCellMappingDefinition
 {
-	public int TargetRowIndex;
-	public int TargetColumnIndex;
+	public int TargetRowIndex = -1;
+	public int TargetColumnIndex = -1;
 	public DataTableCellDefinition MasterCell;
 	public DataTableCellDefinition SlaveCell;
 	public MappingStatusDefinition Status;
@@ -27,11 +35,12 @@ public struct DataTableCellMappingDefinition
 
 public enum MappingStatusDefinition
 {
+	Unknown,
 	New,
 	Unchange,
 	Update,
-	Delete,
-	Unknown
+	Delete
+	
 }
 
 public enum ComparisonMethodDefinition

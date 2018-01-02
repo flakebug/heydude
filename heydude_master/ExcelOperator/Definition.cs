@@ -15,10 +15,17 @@ namespace ryliang.Excel
 {
 	public class Cell
 	{
+		public int RowIndex;
+		public int ColumnIndex;
 		public string Text;
 		public string Comment;
 		public System.Drawing.Color FontColor;
 		public System.Drawing.Color BackgroundColor;
+		public Cell(int RowIndex, int ColumnIndex)
+		{
+			this.RowIndex = RowIndex;
+			this.ColumnIndex = ColumnIndex;
+		}
 	}
 	public class Row
 	{
@@ -32,9 +39,10 @@ namespace ryliang.Excel
 	{
 		public string Name;
 		public Dictionary<int, Row> Rows;
-		public Worksheet()
+		public Worksheet(string WorksheetName)
 		{
 			Rows = new Dictionary<int, Row>();
+			Name = WorksheetName;
 		}
 	}
 	public class Workbook
@@ -62,17 +70,13 @@ namespace ryliang.Excel
 			     tableIndex++) {
 				Worksheet worksheet = this.Worksheets[tableIndex];
 				ExcelWorksheet eppWorksheet = eppPackage.Workbook.Worksheets.Add(worksheet.Name);
-				Parallel.For(0, worksheet.Rows.Count, (int rowIndex) => {
-					for (int columnIndex = 0;
-				         columnIndex < worksheet.Rows[rowIndex].Columns.Count;
-				         columnIndex++) {
-						lock (eppWorksheet) {
-							eppWorksheet.Cells[rowIndex + 1, columnIndex + 1].Value = worksheet.Rows[rowIndex].Columns[columnIndex].Text;
-						}
-					}
-				});
+//				foreach (KeyValuePair<int, Row> rowItem in worksheet.Rows)
+//					foreach (KeyValuePair<int, Cell> cl in rowItem.Value.Columns)
+//						//Con
+//						//eppWorksheet.Cells[cl.Value.RowIndex, cl.Value.ColumnIndex].Value = cl.Value.Text;
+
 			}
 			eppPackage.Save();
-		}		
+		}
 	}
 }
