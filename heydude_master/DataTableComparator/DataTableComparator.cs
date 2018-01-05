@@ -139,14 +139,30 @@ namespace ryliang.DataTableComparator
 			     index++) {
 				DataTableCellMappingDefinition item = CellMapping[index];
 				if (item.Status == MappingStatusDefinition.Delete) {
+					//if the cell is deleted
 					if (deletedTargetRowMapping.ContainsKey(item.SlaveCell.RowIndex))
+						//and if the row is deleted
 						item.TargetRowIndex = deletedTargetRowMapping[item.SlaveCell.RowIndex];
 					else
-						item.TargetRowIndex = item.SlaveCell.RowIndex + deletedTargetRowMapping.Count();
+						//but the row is not deleted
+						//item.TargetRowIndex = item.SlaveCell.RowIndex + deletedTargetRowMapping.Count();
+						item.TargetRowIndex = 
+							_masterDataTableInfo.IndexedRowSetByName[
+								_slaveDataTableInfo.IndexedRowSetByNumber[
+									item.SlaveCell.RowIndex]] + 
+										deletedTargetRowMapping.Count();
 					if (deletedTargetColumnMapping.ContainsKey(item.SlaveCell.ColumnIndex))
+						//and if the column is deleted
 						item.TargetColumnIndex = deletedTargetColumnMapping[item.SlaveCell.ColumnIndex];
 					else
-						item.TargetColumnIndex = item.SlaveCell.ColumnIndex + deletedTargetColumnMapping.Count();
+						//but the column is not deleted
+						//item.TargetColumnIndex = item.SlaveCell.ColumnIndex + deletedTargetColumnMapping.Count();
+						item.TargetColumnIndex = 
+							_masterDataTableInfo.IndexedColumnSetByName[
+								_slaveDataTableInfo.IndexedColumnSetByNumber[
+									item.SlaveCell.ColumnIndex]] + 
+										deletedTargetRowMapping.Count();
+
 				} else {
 					item.TargetRowIndex = masterTargetRowMapping[item.MasterCell.RowIndex];
 					item.TargetColumnIndex = masterTargetColumnMapping[item.MasterCell.ColumnIndex];

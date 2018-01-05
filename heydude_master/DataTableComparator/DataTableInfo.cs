@@ -179,10 +179,13 @@ namespace ryliang.DataTableComparator
 		private Dictionary<string, List<int>> getKeyRowIndexList()
 		{
 			Dictionary<string, List<int>> rowList = new Dictionary<string, List<int>>();
+			//rowList.Add("__sys__keyrow", _keyRowIndex);
 			for (int columnIndex = 0;
 			     columnIndex < _payloadTable.Columns.Count;
 			     columnIndex++) {
 				string content = _payloadTable.Rows[_keyRowIndex][columnIndex].ToString();
+				if (content.Trim() == "" && _keyColumnIndex == columnIndex)
+					content = "__sys__keycolumn";
 				if (!rowList.ContainsKey(content)) {
 					rowList.Add(content, new List<int>());
 				}
@@ -198,6 +201,8 @@ namespace ryliang.DataTableComparator
 			     rowIndex < _payloadTable.Rows.Count;
 			     rowIndex++) {
 				string content = _payloadTable.Rows[rowIndex][_keyColumnIndex].ToString();
+				if (content.Trim() == "" && _keyRowIndex == rowIndex)
+					content = "__sys__keyrow";				
 				if (!columnList.ContainsKey(content)) {
 					columnList.Add(content, new List<int>());
 				}
@@ -226,6 +231,7 @@ namespace ryliang.DataTableComparator
 				if (item.Value.Count == 1)
 					result.Add(item.Key, item.Value[0]);
 			}
+			result.Add("__sys__keyrow",_keyRowIndex);
 			return result;		
 		}
 		
@@ -249,6 +255,7 @@ namespace ryliang.DataTableComparator
 				if (item.Value.Count == 1)
 					result.Add(item.Key, item.Value[0]);
 			}
+			result.Add("__sys__keycolumn", _keyColumnIndex);
 			return result;		
 		}		
 	}
