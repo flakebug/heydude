@@ -231,7 +231,6 @@ namespace ryliang.DataTableComparator
 				if (item.Value.Count == 1)
 					result.Add(item.Key, item.Value[0]);
 			}
-			result.Add("__sys__keyrow",_keyRowIndex);
 			return result;		
 		}
 		
@@ -255,7 +254,6 @@ namespace ryliang.DataTableComparator
 				if (item.Value.Count == 1)
 					result.Add(item.Key, item.Value[0]);
 			}
-			result.Add("__sys__keycolumn", _keyColumnIndex);
 			return result;		
 		}		
 	}
