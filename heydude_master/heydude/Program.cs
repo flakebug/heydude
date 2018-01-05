@@ -71,7 +71,9 @@ namespace heydude
 //					Console.WriteLine();
 					dtResult.Rows[mapItem.TargetRowIndex][mapItem.TargetColumnIndex] = mapItem.MasterCell.Text;
 					if (mapItem.Status == MappingStatusDefinition.Update) {
-						cl.Comment = mapItem.SlaveCell.Text;
+						cl.Comment = "Updated:\n" +
+							"Old : " + mapItem.SlaveCell.Text + "\n" + 
+							"New : " + mapItem.MasterCell.Text;
 						cl.BackgroundColor = Color.Yellow;
 					}
 					if (mapItem.Status == MappingStatusDefinition.New) {

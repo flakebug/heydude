@@ -47,11 +47,23 @@ namespace ryliang.Excel
 	{
 		private string _excelFilename;
 		private DataSet _excelDataSet;
+		private List<string> _worksheetNames;
 		public List<DataTablePropertyDef> DataTablePropertyCollection;
-
+		public List<string> WorksheetNames {
+			get { return _worksheetNames; }
+		}
+		public DataSet ExcelDataSet
+		{
+			get { return _excelDataSet; }
+		}
+		public ExcelOperator()
+		{
+			
+		}
 		public ExcelOperator(string Filename)
 		{
 			_excelFilename = Filename;
+			LoadWorkbook();
 		}
 		public DataSet LoadWorkbook()
 		{
@@ -60,6 +72,8 @@ namespace ryliang.Excel
 		}
 		public DataSet LoadWorkbook(string Filename)
 		{
+			_excelFilename = Filename;
+			_worksheetNames = new List<string>();
 			DataSet ds = new DataSet();
 			FileStream _excelFileStream;
 			ExcelPackage _excelPackage;			
@@ -69,15 +83,23 @@ namespace ryliang.Excel
 			    	worksheetIndex <= _excelPackage.Workbook.Worksheets.Count; 
 			    	worksheetIndex++) {
 				ExcelWorksheet worksheet = _excelPackage.Workbook.Worksheets[worksheetIndex];
-				int rowLimit = worksheet.Dimension.End.Row;
-				int columnLimit = worksheet.Dimension.End.Column;
+				_worksheetNames.Add(worksheet.Name);
+				int rowLimit;
+				int columnLimit;
+				if (worksheet.Dimension == null) {
+					rowLimit = 0;
+					columnLimit = 0;
+				} else {
+					rowLimit = worksheet.Dimension.End.Row;
+					columnLimit = worksheet.Dimension.End.Column;
+				}
 
 				DataTable dt = new DataTable();
 				dt.TableName = worksheet.Name;
 				
 				//Initialize columns
 				for (int colIndex = 0; colIndex < columnLimit; colIndex++) {
-					dt.Columns.Add(colIndex.ToString(), typeof(string));
+					dt.Columns.Add((colIndex + 1).ToString(), typeof(string));
 				}
 				//Initialize rows
 				Parallel.For(0, rowLimit, (int rowIndex) => {
@@ -137,7 +159,6 @@ namespace ryliang.Excel
 //			     tableIndex < DataTablePropertyCollection.Count;
 //			     tableIndex++) {
 			ExcelWorksheet worksheet = _excelPackage.Workbook.Worksheets.Add(DataTable.TableName);
-			;
 
 			Object thisLock = new Object();
 			Parallel.ForEach(CellPropertyCollection, (CellPropertyDef propItem) => {
@@ -150,11 +171,11 @@ namespace ryliang.Excel
 						worksheet.Cells[propItem.RowIndex + 1, propItem.ColumnIndex + 1].Style.Fill.BackgroundColor.SetColor(propItem.BackgroundColor);
 					}
 				}
-				if (propItem.Comment != null && propItem.Comment.Trim() != "") {
-					ExcelComment cmt = worksheet.Cells[propItem.RowIndex + 1, propItem.ColumnIndex + 1].Comment;
-					if (cmt != null)
-						worksheet.Comments.Remove(cmt);
+				if (propItem.Comment != null) {
 					lock (thisLock) {
+//						ExcelComment cmt = worksheet.Cells[propItem.RowIndex + 1, propItem.ColumnIndex + 1].Comment;
+//						if (cmt != null)
+//							worksheet.Comments.Remove(cmt);			                 			
 						worksheet.Cells[propItem.RowIndex + 1, propItem.ColumnIndex + 1].AddComment(propItem.Comment, "ryliang");
 					}
 				}

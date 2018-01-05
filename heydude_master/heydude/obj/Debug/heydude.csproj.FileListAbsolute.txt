@@ -22,3 +22,15 @@ C:\dev\heydude_master\heydude\bin\Debug\EPPlus.xml
 C:\dev\heydude_master\heydude\obj\Debug\heydude.csprojResolveAssemblyReference.cache
 C:\dev\heydude_master\heydude\obj\Debug\heydude.exe
 C:\dev\heydude_master\heydude\obj\Debug\heydude.pdb
+C:\Users\liang\Desktop\heydude_master\heydude\bin\Debug\heydude.exe.config
+C:\Users\liang\Desktop\heydude_master\heydude\bin\Debug\heydude.exe
+C:\Users\liang\Desktop\heydude_master\heydude\bin\Debug\heydude.pdb
+C:\Users\liang\Desktop\heydude_master\heydude\bin\Debug\ryliang.DataTableComparator.dll
+C:\Users\liang\Desktop\heydude_master\heydude\bin\Debug\ryliang.Excel.dll
+C:\Users\liang\Desktop\heydude_master\heydude\bin\Debug\EPPlus.dll
+C:\Users\liang\Desktop\heydude_master\heydude\bin\Debug\ryliang.DataTableComparator.pdb
+C:\Users\liang\Desktop\heydude_master\heydude\bin\Debug\ryliang.Excel.pdb
+C:\Users\liang\Desktop\heydude_master\heydude\bin\Debug\EPPlus.xml
+C:\Users\liang\Desktop\heydude_master\heydude\obj\Debug\heydude.csprojResolveAssemblyReference.cache
+C:\Users\liang\Desktop\heydude_master\heydude\obj\Debug\heydude.exe
+C:\Users\liang\Desktop\heydude_master\heydude\obj\Debug\heydude.pdb

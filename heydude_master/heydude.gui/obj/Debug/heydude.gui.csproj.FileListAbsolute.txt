@@ -1,0 +1,12 @@
+C:\Users\liang\Desktop\heydude_master\heydude.gui\bin\Debug\heydude.gui.exe.config
+C:\Users\liang\Desktop\heydude_master\heydude.gui\bin\Debug\heydude.gui.exe
+C:\Users\liang\Desktop\heydude_master\heydude.gui\bin\Debug\heydude.gui.pdb
+C:\Users\liang\Desktop\heydude_master\heydude.gui\obj\Debug\heydude.gui.csprojResolveAssemblyReference.cache
+C:\Users\liang\Desktop\heydude_master\heydude.gui\obj\Debug\heydude.gui.exe
+C:\Users\liang\Desktop\heydude_master\heydude.gui\obj\Debug\heydude.gui.pdb
+C:\Users\liang\Desktop\heydude_master\heydude.gui\obj\Debug\heydude.gui.MainForm.resources
+C:\Users\liang\Desktop\heydude_master\heydude.gui\obj\Debug\heydude.gui.csproj.GenerateResource.Cache
+C:\Users\liang\Desktop\heydude_master\heydude.gui\bin\Debug\ryliang.Excel.dll
+C:\Users\liang\Desktop\heydude_master\heydude.gui\bin\Debug\EPPlus.dll
+C:\Users\liang\Desktop\heydude_master\heydude.gui\bin\Debug\ryliang.Excel.pdb
+C:\Users\liang\Desktop\heydude_master\heydude.gui\bin\Debug\EPPlus.xml

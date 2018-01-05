@@ -185,6 +185,8 @@ namespace ryliang.DataTableComparator
 			     columnIndex++) {
 				string content = _payloadTable.Rows[_keyRowIndex][columnIndex].ToString();
 				if (content.Trim() == "" && _keyColumnIndex == columnIndex)
+					//if the cell is empty but located in header column
+					//assign the dummy title for it					
 					content = "__sys__keycolumn";
 				if (!rowList.ContainsKey(content)) {
 					rowList.Add(content, new List<int>());
@@ -202,7 +204,9 @@ namespace ryliang.DataTableComparator
 			     rowIndex++) {
 				string content = _payloadTable.Rows[rowIndex][_keyColumnIndex].ToString();
 				if (content.Trim() == "" && _keyRowIndex == rowIndex)
-					content = "__sys__keyrow";				
+					//if the cell is empty but located in header row
+					//assign the dummy title for it
+					content = "__sys__keyrow";					
 				if (!columnList.ContainsKey(content)) {
 					columnList.Add(content, new List<int>());
 				}
@@ -237,7 +241,7 @@ namespace ryliang.DataTableComparator
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <returns>Return the indexed row number of the index column</returns>
+		/// <returns>the indexed row number of key column</returns>
 		private Dictionary<int, string> getIndexedRowSetByNumber()
 		{
 			Dictionary<int, string> result = new Dictionary<int, string>();

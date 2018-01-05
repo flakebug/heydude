@@ -12,3 +12,10 @@ C:\dev\heydude_master\ExcelOperator\bin\Debug\EPPlus.xml
 C:\dev\heydude_master\ExcelOperator\obj\Debug\ryliang.excel.csprojResolveAssemblyReference.cache
 C:\dev\heydude_master\ExcelOperator\obj\Debug\ryliang.Excel.dll
 C:\dev\heydude_master\ExcelOperator\obj\Debug\ryliang.Excel.pdb
+C:\Users\liang\Desktop\heydude_master\ExcelOperator\bin\Debug\ryliang.Excel.dll
+C:\Users\liang\Desktop\heydude_master\ExcelOperator\bin\Debug\ryliang.Excel.pdb
+C:\Users\liang\Desktop\heydude_master\ExcelOperator\bin\Debug\EPPlus.dll
+C:\Users\liang\Desktop\heydude_master\ExcelOperator\bin\Debug\EPPlus.xml
+C:\Users\liang\Desktop\heydude_master\ExcelOperator\obj\Debug\ryliang.Excel.dll
+C:\Users\liang\Desktop\heydude_master\ExcelOperator\obj\Debug\ryliang.Excel.pdb
+C:\Users\liang\Desktop\heydude_master\ExcelOperator\obj\Debug\ryliang.excel.csprojResolveAssemblyReference.cache
