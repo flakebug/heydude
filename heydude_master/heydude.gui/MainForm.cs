@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using ryliang.Excel;
 using System.Drawing;
 using System.Data;
-
+using ryliang.DataTableComparator;
 namespace heydude.gui
 {
 	/// <summary>
@@ -23,7 +23,7 @@ namespace heydude.gui
 	{
 		private ExcelOperator _previousExcel;
 		private ExcelOperator _updatedExcel;
-		
+
 		public MainForm()
 		{
 			//
@@ -37,28 +37,30 @@ namespace heydude.gui
 		}
 		void BtnLoadPreviousExcelClick(object sender, EventArgs e)
 		{
-
-			_previousExcel = ExcelGUIInitiator(cboPreviousWorksheets, dgPreviousWorksheet);
+			ExcelOperator xlsx = ExcelGUIInitiator(txtPreviousFilename, cboPreviousWorksheets, dgPreviousWorksheet);;
+			if (xlsx != null)
+				_previousExcel = xlsx;
 
 			
 		}
-		ExcelOperator ExcelGUIInitiator(ComboBox WorksheetsCombobox, DataGridView WorksheetDataGrid)
+		ExcelOperator ExcelGUIInitiator(TextBox FilenameBox, ComboBox WorksheetsCombobox, DataGridView WorksheetDataGrid)
 		{
+			OpenFileDialog ofd = new OpenFileDialog();
+			ofd.Filter =  "Excel Files (*.xlsx)|*.xlsx";
 			ExcelOperator xlsx = new ExcelOperator();
-			DialogResult dlg = ofdMain.ShowDialog();
+			DialogResult dlg = ofd.ShowDialog();
 			if (dlg == DialogResult.OK) {
 				try {
-					xlsx = new ExcelOperator(ofdMain.FileName);
-				}
-				catch {
-					MessageBox.Show("Not a valid excel file","Error",MessageBoxButtons.OK,MessageBoxIcon.Error);
+					xlsx = new ExcelOperator(ofd.FileName);
+				} catch {
+					MessageBox.Show("Not a valid excel file", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
 					return xlsx;
 				}
+			} else {
+				return null;
 			}
-			else {
-				return xlsx;
-			}
-			txtPreviousFilename.Text = ofdMain.FileName;
+			
+			FilenameBox.Text = ofd.FileName;
 			WorksheetDataGrid.DataSource = null;
 			WorksheetsCombobox.Items.Clear();
 			foreach (string sheetname in xlsx.WorksheetNames) {
@@ -127,13 +129,45 @@ namespace heydude.gui
 			setGridHighlight(dgPreviousWorksheet, cboPrevHeaderRow, cboPrevIndexColumn);
 
 		}
-		void Label3Click(object sender, EventArgs e)
+
+		void BtnLoadCurrentExcelClick(object sender, EventArgs e)
 		{
-	
+			_updatedExcel = ExcelGUIInitiator(txtCurrentFilename, cboCurrentWorksheets, dgCurrentWorksheet);
+
 		}
-		void TabpgUpdatedExcelClick(object sender, EventArgs e)
+		void CboCurrentWorksheetsSelectedIndexChanged(object sender, EventArgs e)
 		{
-	
+			DataTable dt = _updatedExcel.ExcelDataSet.Tables[cboCurrentWorksheets.SelectedItem.ToString()];
+			worksheetChangeGUI(dt, dgCurrentWorksheet, cboCurrentHeaderRow, cboCurrentIndexColumn);
+
 		}
+		void CboCurrentHeaderRowSelectedIndexChanged(object sender, EventArgs e)
+		{
+			setGridHighlight(dgCurrentWorksheet, cboCurrentHeaderRow, cboCurrentIndexColumn);
+
+		}
+		void CboCurrentIndexColumnSelectedIndexChanged(object sender, EventArgs e)
+		{
+			setGridHighlight(dgCurrentWorksheet, cboCurrentHeaderRow, cboCurrentIndexColumn);
+
+		}
+		void BtnAssignOutputFileClick(object sender, EventArgs e)
+		{
+			SaveFileDialog sfd = new SaveFileDialog();
+			sfd.Filter = "Excel Files (*.xlsx)|*.xlsx";
+			DialogResult dlg = sfd.ShowDialog();
+			if (dlg == DialogResult.OK) {
+				txtOutputFilename.Text = sfd.FileName;
+			} 
+		}
+		void BtnProceedClick(object sender, EventArgs e)
+		{
+			DataTable updated = _updatedExcel.ExcelDataSet.Tables[cboCurrentWorksheets.SelectedItem.ToString()];
+			DataTable previous = _previousExcel.ExcelDataSet.Tables[cboPreviousWorksheets.SelectedItem.ToString()];
+			DataTableComparator dtc = new DataTableComparator(updated, previous);
+			dtc.Compare();
+			
+		}
+
 	}
 }

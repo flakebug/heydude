@@ -66,6 +66,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataTableComparator\ryliang.DataTableComparator.csproj">
+      <Project>{22f1c4ae-6246-47a2-87f3-f12b664fee93}</Project>
+      <Name>ryliang.DataTableComparator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ExcelOperator\ryliang.excel.csproj">
       <Project>{22e4d0fd-a850-45d9-91d4-92753ed88019}</Project>
       <Name>ryliang.Excel</Name>
