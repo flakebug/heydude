@@ -44,7 +44,6 @@ namespace heydude.gui
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.Label label11;
 		private System.Windows.Forms.Label label12;
-		private System.Windows.Forms.TabPage tabPage1;
 		private System.Windows.Forms.TextBox textBox2;
 		private System.Windows.Forms.Button btnProceed;
 		private System.Windows.Forms.Button btnAssignOutputFile;
@@ -101,11 +100,10 @@ namespace heydude.gui
 			this.dgCurrentWorksheet = new System.Windows.Forms.DataGridView();
 			this.btnLoadCurrentExcel = new System.Windows.Forms.Button();
 			this.tabpgResult = new System.Windows.Forms.TabPage();
+			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.btnProceed = new System.Windows.Forms.Button();
 			this.btnAssignOutputFile = new System.Windows.Forms.Button();
 			this.txtOutputFilename = new System.Windows.Forms.TextBox();
-			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.textBox2 = new System.Windows.Forms.TextBox();
 			this.tabMain.SuspendLayout();
 			this.tabpgPreviousExcel.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -114,7 +112,6 @@ namespace heydude.gui
 			this.groupBox2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dgCurrentWorksheet)).BeginInit();
 			this.tabpgResult.SuspendLayout();
-			this.tabPage1.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabMain
@@ -125,7 +122,6 @@ namespace heydude.gui
 			this.tabMain.Controls.Add(this.tabpgPreviousExcel);
 			this.tabMain.Controls.Add(this.tabpgUpdatedExcel);
 			this.tabMain.Controls.Add(this.tabpgResult);
-			this.tabMain.Controls.Add(this.tabPage1);
 			this.tabMain.Font = new System.Drawing.Font("新細明體", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
 			this.tabMain.Location = new System.Drawing.Point(11, 11);
 			this.tabMain.Margin = new System.Windows.Forms.Padding(2);
@@ -452,6 +448,7 @@ namespace heydude.gui
 			// 
 			// tabpgResult
 			// 
+			this.tabpgResult.Controls.Add(this.textBox2);
 			this.tabpgResult.Controls.Add(this.btnProceed);
 			this.tabpgResult.Controls.Add(this.btnAssignOutputFile);
 			this.tabpgResult.Controls.Add(this.txtOutputFilename);
@@ -463,6 +460,20 @@ namespace heydude.gui
 			this.tabpgResult.TabIndex = 2;
 			this.tabpgResult.Text = "Result";
 			this.tabpgResult.UseVisualStyleBackColor = true;
+			// 
+			// textBox2
+			// 
+			this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+			| System.Windows.Forms.AnchorStyles.Left) 
+			| System.Windows.Forms.AnchorStyles.Right)));
+			this.textBox2.Location = new System.Drawing.Point(6, 174);
+			this.textBox2.Multiline = true;
+			this.textBox2.Name = "textBox2";
+			this.textBox2.Size = new System.Drawing.Size(745, 276);
+			this.textBox2.TabIndex = 17;
+			this.textBox2.Text = "== HeyDude ==\r\nAuthor : Liang\r\nDescription : Compare the difference of excel\r\n\r\nV" +
+	"ersion : 0.1\r\nReleaser : Liang\r\nDate : 2018/1/12\r\nNote :\r\nInitial release, funct" +
+	"ional preview\r\nbugs everywhere";
 			// 
 			// btnProceed
 			// 
@@ -495,31 +506,6 @@ namespace heydude.gui
 			this.txtOutputFilename.Size = new System.Drawing.Size(546, 31);
 			this.txtOutputFilename.TabIndex = 14;
 			// 
-			// tabPage1
-			// 
-			this.tabPage1.Controls.Add(this.textBox2);
-			this.tabPage1.Location = new System.Drawing.Point(4, 30);
-			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(757, 454);
-			this.tabPage1.TabIndex = 3;
-			this.tabPage1.Text = "About";
-			this.tabPage1.UseVisualStyleBackColor = true;
-			// 
-			// textBox2
-			// 
-			this.textBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-			| System.Windows.Forms.AnchorStyles.Left) 
-			| System.Windows.Forms.AnchorStyles.Right)));
-			this.textBox2.Location = new System.Drawing.Point(6, 3);
-			this.textBox2.Multiline = true;
-			this.textBox2.Name = "textBox2";
-			this.textBox2.Size = new System.Drawing.Size(745, 445);
-			this.textBox2.TabIndex = 0;
-			this.textBox2.Text = "HeyDude\r\nAuthor : Liang\r\nDescription : Compare the difference of excel\r\n\r\nVersion" +
-	" : 0.1\r\nReleaser : Liang\r\nDate : 2018/1/12\r\nNote :\r\nInitial release, functional " +
-	"preview\r\nbugs everywhere";
-			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -529,7 +515,6 @@ namespace heydude.gui
 			this.Margin = new System.Windows.Forms.Padding(2);
 			this.Name = "MainForm";
 			this.Text = "heydude.gui";
-			this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 			this.tabMain.ResumeLayout(false);
 			this.tabpgPreviousExcel.ResumeLayout(false);
 			this.groupBox1.ResumeLayout(false);
@@ -541,8 +526,6 @@ namespace heydude.gui
 			((System.ComponentModel.ISupportInitialize)(this.dgCurrentWorksheet)).EndInit();
 			this.tabpgResult.ResumeLayout(false);
 			this.tabpgResult.PerformLayout();
-			this.tabPage1.ResumeLayout(false);
-			this.tabPage1.PerformLayout();
 			this.ResumeLayout(false);
 
 		}

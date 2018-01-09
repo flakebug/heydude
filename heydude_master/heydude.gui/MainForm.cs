@@ -37,7 +37,8 @@ namespace heydude.gui
 		}
 		void BtnLoadPreviousExcelClick(object sender, EventArgs e)
 		{
-			ExcelOperator xlsx = ExcelGUIInitiator(txtPreviousFilename, cboPreviousWorksheets, dgPreviousWorksheet);;
+			ExcelOperator xlsx = ExcelGUIInitiator(txtPreviousFilename, cboPreviousWorksheets, dgPreviousWorksheet);
+			;
 			if (xlsx != null)
 				_previousExcel = xlsx;
 
@@ -46,7 +47,7 @@ namespace heydude.gui
 		ExcelOperator ExcelGUIInitiator(TextBox FilenameBox, ComboBox WorksheetsCombobox, DataGridView WorksheetDataGrid)
 		{
 			OpenFileDialog ofd = new OpenFileDialog();
-			ofd.Filter =  "Excel Files (*.xlsx)|*.xlsx";
+			ofd.Filter = "Excel Files (*.xlsx)|*.xlsx";
 			ExcelOperator xlsx = new ExcelOperator();
 			DialogResult dlg = ofd.ShowDialog();
 			if (dlg == DialogResult.OK) {
@@ -132,8 +133,10 @@ namespace heydude.gui
 
 		void BtnLoadCurrentExcelClick(object sender, EventArgs e)
 		{
-			_updatedExcel = ExcelGUIInitiator(txtCurrentFilename, cboCurrentWorksheets, dgCurrentWorksheet);
-
+			ExcelOperator xlsx;
+			xlsx = ExcelGUIInitiator(txtCurrentFilename, cboCurrentWorksheets, dgCurrentWorksheet);
+			if (xlsx != null)
+				_updatedExcel = xlsx;
 		}
 		void CboCurrentWorksheetsSelectedIndexChanged(object sender, EventArgs e)
 		{
@@ -162,11 +165,61 @@ namespace heydude.gui
 		}
 		void BtnProceedClick(object sender, EventArgs e)
 		{
-			DataTable updated = _updatedExcel.ExcelDataSet.Tables[cboCurrentWorksheets.SelectedItem.ToString()];
-			DataTable previous = _previousExcel.ExcelDataSet.Tables[cboPreviousWorksheets.SelectedItem.ToString()];
-			DataTableComparator dtc = new DataTableComparator(updated, previous);
-			dtc.Compare();
-			
+			if (_previousExcel != null &&
+			    _updatedExcel != null &&
+			    txtOutputFilename.Text != "") {
+				ExcelOperator xlsxop = new ExcelOperator();
+				
+				DataTable updated = _updatedExcel.ExcelDataSet.Tables[cboCurrentWorksheets.SelectedItem.ToString()];
+				DataTable previous = _previousExcel.ExcelDataSet.Tables[cboPreviousWorksheets.SelectedItem.ToString()];
+				DataTableComparator dtc = new DataTableComparator(updated, previous);
+				dtc.MasterDataTableInfo.KeyColumnIndex = Convert.ToInt32(cboCurrentIndexColumn.SelectedItem) - 1;
+				dtc.MasterDataTableInfo.KeyRowIndex = Convert.ToInt32(cboCurrentHeaderRow.SelectedItem) - 1;
+				dtc.SlaveDataTableInfo.KeyColumnIndex = Convert.ToInt32(cboPrevIndexColumn.SelectedItem) - 1;
+				dtc.SlaveDataTableInfo.KeyRowIndex = Convert.ToInt32(cboPrevHeaderRow.SelectedItem) - 1;
+				dtc.Compare();
+				DataTable dtResult = new DataTable("output");
+				for (int columnIndex = 0; columnIndex < dtc.CellMappingColumnCount; columnIndex++)
+					dtResult.Columns.Add(columnIndex.ToString(), typeof(string));
+				for (int rowIndex = 0; rowIndex < dtc.CellMappingRowCount; rowIndex++)
+					dtResult.Rows.Add(dtResult.NewRow());	
+				List<CellPropertyDef> output = new List<CellPropertyDef>();				
+				
+				foreach (DataTableCellMappingDefinition mapItem in dtc.CellMappingCollection) {
+					CellPropertyDef cl = new CellPropertyDef(mapItem.TargetRowIndex, mapItem.TargetColumnIndex);
+					switch (mapItem.Status) {
+						case MappingStatusDefinition.Delete:
+							dtResult.Rows[mapItem.TargetRowIndex][mapItem.TargetColumnIndex] = mapItem.SlaveCell.Text;
+							cl.BackgroundColor = Color.LightGray;							
+							break;
+						case MappingStatusDefinition.New:
+							dtResult.Rows[mapItem.TargetRowIndex][mapItem.TargetColumnIndex] = mapItem.MasterCell.Text;
+							cl.BackgroundColor = Color.LightGreen;
+							break;
+						case MappingStatusDefinition.Update:
+							dtResult.Rows[mapItem.TargetRowIndex][mapItem.TargetColumnIndex] = mapItem.MasterCell.Text;
+							cl.Comment = "Updated:\n" +
+							"Old : " + mapItem.SlaveCell.Text + "\n" +
+							"New : " + mapItem.MasterCell.Text;
+							cl.BackgroundColor = Color.Yellow;
+							break;
+						case MappingStatusDefinition.Unknown:
+							dtResult.Rows[mapItem.TargetRowIndex][mapItem.TargetColumnIndex] = mapItem.MasterCell.Text;
+							cl.BackgroundColor = Color.LightPink;
+							break;
+						default :
+							dtResult.Rows[mapItem.TargetRowIndex][mapItem.TargetColumnIndex] = mapItem.MasterCell.Text;
+							break;
+					}
+					output.Add(cl);
+				}
+				xlsxop.SaveWorkbook(dtResult, output, txtOutputFilename.Text);
+				MessageBox.Show("Complete", "Information", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+
+			} else {
+				MessageBox.Show("Please specify the excel first", "Warning", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+			}
 		}
 
 	}
